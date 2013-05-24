@@ -13,5 +13,7 @@ public enum CellContent {
     BREEZE,
     PIT,
     WUMPUS,
-    GOLD
+    GLITTER,
+    GOLD,
+    NONE
 }

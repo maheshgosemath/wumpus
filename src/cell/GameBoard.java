@@ -5,7 +5,6 @@
 package cell;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -15,15 +14,15 @@ import java.util.Random;
 
 public class GameBoard {
     
-    private static GameBoard board;
+    private static GameBoard board=new GameBoard();
     private ArrayList<Cell> cells;
+    private ArrayList<Cell> neighbours;
+    private Cell cellGrid[][];
     private int width=4;
     private int heigth=4;
     Random random=new Random();
     
-    public static GameBoard getBoard()
-    {
-        board.initGameBoard();
+    public static GameBoard getBoard() {
         return board;
     }
 
@@ -43,13 +42,14 @@ public class GameBoard {
         this.heigth = heigth;
     }
     
-    public void initGameBoard()
-    {
-        for(int i=0;i<4;i++)
-        {
-            for(int j=0;j<4;j++)
-            {
-                cells.add(new Cell(i,j));
+    public void initGameBoard() {
+        cells=new ArrayList<>();
+        cellGrid=new Cell[width][heigth];
+        for(int i=0;i<width;i++) {
+            for(int j=0;j<heigth;j++) {
+                cellGrid[i][j]=new Cell(i,j);
+                cellGrid[i][j].setCellStatus(CellContent.NONE);
+                cells.add(cellGrid[i][j]);
             }
         }
         addWumpus();
@@ -58,46 +58,90 @@ public class GameBoard {
         
     }
     
-    public void addWumpus()
-    {
+    public void addWumpus() {
         Cell cell = cells.get(random.nextInt(16));
-        if(!(cell.getCellContent().contains(CellContent.PIT)||(cell.getCellContent().contains(CellContent.PIT)))){
+        if(!(cell.getCellContent().contains(CellContent.PIT)&&(cell.getCellContent().contains(CellContent.GLITTER)))){
+            if(cell.getCellContent().contains(CellContent.NONE)){
+                    cell.getCellContent().remove(CellContent.NONE);
+            }
             cell.setCellStatus(CellContent.WUMPUS);
+            addStenchToNeighbours(cell);
+        }else{
         }
     }
     
-    public void addPit()
-    {
+    public void addPit() {
         Cell cell = cells.get(random.nextInt(16));
-        cell.setCellStatus(CellContent.PIT);
+        if(!(cell.getCellContent().contains(CellContent.WUMPUS)&&(cell.getCellContent().contains(CellContent.GLITTER)))){
+            if(cell.getCellContent().contains(CellContent.NONE)){
+                    cell.getCellContent().remove(CellContent.NONE);
+            }
+            cell.setCellStatus(CellContent.PIT);
+            addBreezeToNeighbours(cell);
+        }else{
+        }
     }
     
-    public void addGold()
-    {
+    public void addGold() {
         Cell cell = cells.get(random.nextInt(16));
-        cell.setCellStatus(CellContent.GOLD);
+        if(!(cell.getCellContent().contains(CellContent.PIT)&&(cell.getCellContent().contains(CellContent.WUMPUS)))){
+            if(cell.getCellContent().contains(CellContent.NONE)){
+                 cell.getCellContent().remove(CellContent.NONE);
+            }
+            cell.setCellStatus(CellContent.GOLD);
+            addGlitterToNeighbours(cell);
+        }else{
+        }
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.cells);
-        return hash;
+    public ArrayList<Cell> getCells() {
+        return cells;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
+    private void addStenchToNeighbours(Cell cell) {
+        neighbours=cell.getNeighbours();
+        for(Cell neighbourCell : neighbours){
+            if(neighbourCell!=null){
+                if(neighbourCell.getCellContent().contains(CellContent.NONE)){
+                    neighbourCell.getCellContent().remove(CellContent.NONE);
+                }
+                if(!neighbourCell.getCellContent().contains(CellContent.STENCH)){
+                    neighbourCell.getCellContent().add(CellContent.STENCH);
+                }
+            }
         }
-        if (getClass() != obj.getClass()) {
-            return false;
+    }
+    
+    private void addBreezeToNeighbours(Cell cell) {
+        neighbours=cell.getNeighbours();
+        for(Cell neighbourCell : neighbours){
+            if(neighbourCell!=null){
+                if(neighbourCell.getCellContent().contains(CellContent.NONE)){
+                    neighbourCell.getCellContent().remove(CellContent.NONE);
+                }
+                if(!neighbourCell.getCellContent().contains(CellContent.BREEZE)){
+                    neighbourCell.getCellContent().add(CellContent.BREEZE);
+                }
+            }
         }
-        final GameBoard other = (GameBoard) obj;
-        if (!Objects.equals(this.cells, other.cells)) {
-            return false;
+    }
+    
+    private void addGlitterToNeighbours(Cell cell) {
+        neighbours=cell.getNeighbours();
+        for(Cell neighbourCell : neighbours){
+            if(neighbourCell!=null){
+                if(neighbourCell.getCellContent().contains(CellContent.NONE)){
+                    neighbourCell.getCellContent().remove(CellContent.NONE);
+                }
+                if(!neighbourCell.getCellContent().contains(CellContent.GLITTER)){
+                    neighbourCell.getCellContent().add(CellContent.GLITTER);
+                }
+            }
         }
-        return true;
+    }
+
+    public Cell[][] getCellGrid() {
+        return cellGrid;
     }
     
 }

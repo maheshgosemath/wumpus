@@ -13,15 +13,16 @@ import java.util.ArrayList;
 public class Cell {
     
     private ArrayList<CellContent> content;
+    private ArrayList<Cell> neighbours;
     private Position points;
-//    private HashSet<Cell> neighbours;
     
     public Cell(int x, int y)
     {
         points=new Position();
         points.setX(x);
         points.setY(y);
-//        setNeighboursPositions();
+        content=new ArrayList<>();
+        neighbours=new ArrayList<>();
     }
     
     public void setCellStatus(CellContent cellContent)
@@ -34,36 +35,29 @@ public class Cell {
         return content;
     }
     
-//    private void setNeighboursPositions()
-//    {
-//        setTopNeighbourPosition(1,0);
-//        setBottomNeighbourPosition(-1,0);
-//        setLeftNeighbourPosition(-1,0);
-//        setRightNeighbourPosition(1,0);
-//    }
-//    
-//    public void setTopNeighbourPosition(int offsetX, int offsetY){
-//        if(this.points.getX()+offsetX<4){
-//            neighbours.add(new Cell(this.points.getX()+offsetX, offsetY));
-//        }
-//    }
-//    
-//    public void setBottomNeighbourPosition(int offsetX, int offsetY){
-//        if(this.points.getX()+offsetX>=0){
-//            neighbours.add(new Cell(this.points.getX()+offsetX, offsetY));
-//        }
-//    }
-//    
-//    public void setLeftNeighbourPosition(int offsetX, int offsetY){
-//        if(this.points.getY()+offsetY<4){
-//            neighbours.add(new Cell(this.points.getX(), this.points.getY()+offsetY));
-//        }
-//    }
-//    
-//    public void setRightNeighbourPosition(int offsetX, int offsetY){
-//        if(this.points.getY()+offsetY>=0){
-//            neighbours.add(new Cell(offsetX, this.points.getX()+offsetY));
-//        }
-//    }
-//    
+    public ArrayList getNeighbours(){
+        neighbours.add(getNeighbour(0, 1));
+        neighbours.add(getNeighbour(0, -1));
+        neighbours.add(getNeighbour(1, 0));
+        neighbours.add(getNeighbour(-1, 0));
+        return neighbours;
+    }
+    
+    public Cell getNeighbour(int offsetX, int offsetY){
+        Cell cell=getCellAtPosition(this.points.getX()+offsetX, this.points.getY()+offsetY);
+        return cell;
+    }
+    
+    public Cell getCellAtPosition(int x, int y){
+        GameBoard gameBoard=GameBoard.getBoard();
+        for(Cell cell : gameBoard.getCells()){
+            if(cell.points.getX()==x){
+                if(cell.points.getY()==y){
+                    return cell;
+                }
+            }
+        }
+        return null;
+    }
+    
 }
