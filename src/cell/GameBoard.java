@@ -17,7 +17,7 @@ public class GameBoard {
     private static GameBoard board=new GameBoard();
     private ArrayList<Cell> cells;
     private ArrayList<Cell> neighbours;
-    private Cell cellGrid[][];
+//    Cell cellGrid[][];
     private int width=4;
     private int heigth=4;
     Random random=new Random();
@@ -30,32 +30,31 @@ public class GameBoard {
         return width;
     }
 
-    public void setWidth(int width) {
+    public GameBoard setWidth(int width) {
         this.width = width;
+        return this;
     }
 
     public int getHeigth() {
         return heigth;
     }
 
-    public void setHeigth(int heigth) {
+    public GameBoard setHeigth(int heigth) {
         this.heigth = heigth;
+        return this;
     }
     
-    public void initGameBoard() {
+    public GameBoard initGameBoard() {
         cells=new ArrayList<>();
-        cellGrid=new Cell[width][heigth];
         for(int i=0;i<width;i++) {
-            for(int j=0;j<heigth;j++) {
-                cellGrid[i][j]=new Cell(i,j);
-                cellGrid[i][j].setCellStatus(CellContent.NONE);
-                cells.add(cellGrid[i][j]);
+            for(int j=0;j<heigth;j++) {               
+                cells.add(new Cell(i,j));
             }
         }
         addWumpus();
         addPit();
         addGold();
-        
+        return this;
     }
     
     public void addWumpus() {
@@ -65,8 +64,7 @@ public class GameBoard {
                     cell.getCellContent().remove(CellContent.NONE);
             }
             cell.setCellStatus(CellContent.WUMPUS);
-            addStenchToNeighbours(cell);
-        }else{
+            addSignalToNeighbours(cell, CellContent.STENCH);
         }
     }
     
@@ -77,8 +75,7 @@ public class GameBoard {
                     cell.getCellContent().remove(CellContent.NONE);
             }
             cell.setCellStatus(CellContent.PIT);
-            addBreezeToNeighbours(cell);
-        }else{
+            addSignalToNeighbours(cell, CellContent.BREEZE);
         }
     }
     
@@ -89,8 +86,7 @@ public class GameBoard {
                  cell.getCellContent().remove(CellContent.NONE);
             }
             cell.setCellStatus(CellContent.GOLD);
-            addGlitterToNeighbours(cell);
-        }else{
+            addSignalToNeighbours(cell, CellContent.GLITTER);
         }
     }
 
@@ -98,50 +94,64 @@ public class GameBoard {
         return cells;
     }
 
-    private void addStenchToNeighbours(Cell cell) {
-        neighbours=cell.getNeighbours();
-        for(Cell neighbourCell : neighbours){
-            if(neighbourCell!=null){
-                if(neighbourCell.getCellContent().contains(CellContent.NONE)){
-                    neighbourCell.getCellContent().remove(CellContent.NONE);
-                }
-                if(!neighbourCell.getCellContent().contains(CellContent.STENCH)){
-                    neighbourCell.getCellContent().add(CellContent.STENCH);
-                }
-            }
-        }
-    }
-    
-    private void addBreezeToNeighbours(Cell cell) {
-        neighbours=cell.getNeighbours();
-        for(Cell neighbourCell : neighbours){
-            if(neighbourCell!=null){
-                if(neighbourCell.getCellContent().contains(CellContent.NONE)){
-                    neighbourCell.getCellContent().remove(CellContent.NONE);
-                }
-                if(!neighbourCell.getCellContent().contains(CellContent.BREEZE)){
-                    neighbourCell.getCellContent().add(CellContent.BREEZE);
-                }
-            }
-        }
-    }
-    
-    private void addGlitterToNeighbours(Cell cell) {
-        neighbours=cell.getNeighbours();
-        for(Cell neighbourCell : neighbours){
-            if(neighbourCell!=null){
-                if(neighbourCell.getCellContent().contains(CellContent.NONE)){
-                    neighbourCell.getCellContent().remove(CellContent.NONE);
-                }
-                if(!neighbourCell.getCellContent().contains(CellContent.GLITTER)){
-                    neighbourCell.getCellContent().add(CellContent.GLITTER);
-                }
-            }
-        }
+//    private void addStenchToNeighbours(Cell cell, CellContent content) {
+//        neighbours=cell.getNeighbours();
+//        for(Cell neighbourCell : neighbours){
+//            if(neighbourCell!=null){
+//                if(neighbourCell.getCellContent().contains(CellContent.NONE)){
+//                    neighbourCell.getCellContent().remove(CellContent.NONE);
+//                }
+//                if(!neighbourCell.getCellContent().contains(content)){
+//                    neighbourCell.getCellContent().add(content);
+//                }
+//            }
+//        }
+//    }
+//    
+//    private void addBreezeToNeighbours(Cell cell) {
+//        neighbours=cell.getNeighbours();
+//        for(Cell neighbourCell : neighbours){
+//            if(neighbourCell!=null){
+//                if(neighbourCell.getCellContent().contains(CellContent.NONE)){
+//                    neighbourCell.getCellContent().remove(CellContent.NONE);
+//                }
+//                if(!neighbourCell.getCellContent().contains(CellContent.BREEZE)){
+//                    neighbourCell.getCellContent().add(CellContent.BREEZE);
+//                }
+//            }
+//        }
+//    }
+//    
+//    private void addGlitterToNeighbours(Cell cell) {
+//        neighbours=cell.getNeighbours();
+//        for(Cell neighbourCell : neighbours){
+//            if(neighbourCell!=null){
+//                if(neighbourCell.getCellContent().contains(CellContent.NONE)){
+//                    neighbourCell.getCellContent().remove(CellContent.NONE);
+//                }
+//                if(!neighbourCell.getCellContent().contains(CellContent.GLITTER)){
+//                    neighbourCell.getCellContent().add(CellContent.GLITTER);
+//                }
+//            }
+//        }
+//    }
+
+    public ArrayList<Cell> getCellGrid() {
+        return cells;
     }
 
-    public Cell[][] getCellGrid() {
-        return cellGrid;
+    private void addSignalToNeighbours(Cell cell, CellContent content) {
+        neighbours=cell.getNeighbours();
+        for(Cell neighbourCell : neighbours){
+            if(neighbourCell!=null){
+                if(neighbourCell.getCellContent().contains(CellContent.NONE)){
+                    neighbourCell.getCellContent().remove(CellContent.NONE);
+                }
+                if(!neighbourCell.getCellContent().contains(content)){
+                    neighbourCell.getCellContent().add(content);
+                }
+            }
+        }
     }
     
 }
