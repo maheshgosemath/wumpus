@@ -9,6 +9,7 @@ package in.javamumbaigroup.cell;
  * @author bansidhai
  */
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
@@ -18,13 +19,13 @@ public class Cell {
     
     private ArrayList<CellContent> content;
     private ArrayList<Cell> neighbours;
-    private Position points;
+    private Position position;
     
     public Cell(int x, int y)
     {
-        points=new Position();
-        points.setX(x);
-        points.setY(y);
+        position=new Position();
+        position.setX(x);
+        position.setY(y);
         content=new ArrayList();
         neighbours=new ArrayList();
     }
@@ -48,20 +49,25 @@ public class Cell {
     }
     
     public Cell getNeighbour(int offsetX, int offsetY){
-        Cell cell=getCellAtPosition(this.points.getX()+offsetX, this.points.getY()+offsetY);
+        Cell cell=getCellAtPosition(this.position.getX()+offsetX, this.position.getY()+offsetY);
         return cell;
     }
     
     public Cell getCellAtPosition(int x, int y){
         GameBoard gameBoard=GameBoard.getBoard();
-        for(Cell cell : gameBoard.getCellGrid()){
-            if(cell.points.getX()==x){
-                if(cell.points.getY()==y){
+        for (Iterator<Cell> it = gameBoard.getCells().iterator(); it.hasNext();) {
+            Cell cell = it.next();
+            if(cell.position.getX()==x){
+                if(cell.position.getY()==y){
                     return cell;
                 }
             }
         }
         return null;
+    }
+
+    public Position getPosition() {
+        return this.position;
     }
     
 }

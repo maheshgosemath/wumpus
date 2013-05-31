@@ -21,7 +21,6 @@ public class GameBoard {
     private static GameBoard board=new GameBoard();
     private ArrayList<Cell> cells;
     private ArrayList<Cell> neighbours;
-//    Cell cellGrid[][];
     private int width=4;
     private int heigth=4;
     Random random=new Random();
@@ -53,6 +52,7 @@ public class GameBoard {
         for(int i=0;i<width;i++) {
             for(int j=0;j<heigth;j++) {               
                 cells.add(new Cell(i,j));
+                cells.get(cells.size()-1).setCellStatus(CellContent.NONE);
             }
         }
         addWumpus();
@@ -62,7 +62,7 @@ public class GameBoard {
     }
     
     public void addWumpus() {
-        Cell cell = cells.get(random.nextInt(16));
+        Cell cell = cells.get(random.nextInt(64));
         if(!(cell.getCellContent().contains(CellContent.PIT)&&(cell.getCellContent().contains(CellContent.GLITTER)))){
             if(cell.getCellContent().contains(CellContent.NONE)){
                     cell.getCellContent().remove(CellContent.NONE);
@@ -73,7 +73,7 @@ public class GameBoard {
     }
     
     public void addPit() {
-        Cell cell = cells.get(random.nextInt(16));
+        Cell cell = cells.get(random.nextInt(64));
         if(!(cell.getCellContent().contains(CellContent.WUMPUS)&&(cell.getCellContent().contains(CellContent.GLITTER)))){
             if(cell.getCellContent().contains(CellContent.NONE)){
                     cell.getCellContent().remove(CellContent.NONE);
@@ -84,7 +84,7 @@ public class GameBoard {
     }
     
     public void addGold() {
-        Cell cell = cells.get(random.nextInt(16));
+        Cell cell = cells.get(random.nextInt(64));
         if(!(cell.getCellContent().contains(CellContent.PIT)&&(cell.getCellContent().contains(CellContent.WUMPUS)))){
             if(cell.getCellContent().contains(CellContent.NONE)){
                  cell.getCellContent().remove(CellContent.NONE);
@@ -97,52 +97,10 @@ public class GameBoard {
     public ArrayList<Cell> getCells() {
         return cells;
     }
-
-//    private void addStenchToNeighbours(Cell cell, CellContent content) {
-//        neighbours=cell.getNeighbours();
-//        for(Cell neighbourCell : neighbours){
-//            if(neighbourCell!=null){
-//                if(neighbourCell.getCellContent().contains(CellContent.NONE)){
-//                    neighbourCell.getCellContent().remove(CellContent.NONE);
-//                }
-//                if(!neighbourCell.getCellContent().contains(content)){
-//                    neighbourCell.getCellContent().add(content);
-//                }
-//            }
-//        }
+//
+//    public ArrayList<Cell> getCellGrid() {
+//        return cells;
 //    }
-//    
-//    private void addBreezeToNeighbours(Cell cell) {
-//        neighbours=cell.getNeighbours();
-//        for(Cell neighbourCell : neighbours){
-//            if(neighbourCell!=null){
-//                if(neighbourCell.getCellContent().contains(CellContent.NONE)){
-//                    neighbourCell.getCellContent().remove(CellContent.NONE);
-//                }
-//                if(!neighbourCell.getCellContent().contains(CellContent.BREEZE)){
-//                    neighbourCell.getCellContent().add(CellContent.BREEZE);
-//                }
-//            }
-//        }
-//    }
-//    
-//    private void addGlitterToNeighbours(Cell cell) {
-//        neighbours=cell.getNeighbours();
-//        for(Cell neighbourCell : neighbours){
-//            if(neighbourCell!=null){
-//                if(neighbourCell.getCellContent().contains(CellContent.NONE)){
-//                    neighbourCell.getCellContent().remove(CellContent.NONE);
-//                }
-//                if(!neighbourCell.getCellContent().contains(CellContent.GLITTER)){
-//                    neighbourCell.getCellContent().add(CellContent.GLITTER);
-//                }
-//            }
-//        }
-//    }
-
-    public ArrayList<Cell> getCellGrid() {
-        return cells;
-    }
 
     private void addSignalToNeighbours(Cell cell, CellContent content) {
         neighbours=cell.getNeighbours();
