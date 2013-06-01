@@ -28,6 +28,23 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+    
+    <developers>
+        <developer>
+            <id>mgosemath</id>
+            <name>Mahesh Gosemath</name>
+            <email>mgosemath@gmail.com</email>
+            <url>http://facebook.com/mahesh.gosemath</url>
+            <organization>MumbaiJavaGroup</organization>
+        </developer>
+	<developer>
+            <id>miteshnisar123</id>
+            <name>Mitesh Nisar</name>
+            <email>mitesh.nisar007@gmail.com</email>
+            <url>https://www.facebook.com/miteshnisar123</url>
+            <organization>MumbaiJavaGroup</organization>
+        </developer>
+    </developers>
 
     <build>
         <plugins>
